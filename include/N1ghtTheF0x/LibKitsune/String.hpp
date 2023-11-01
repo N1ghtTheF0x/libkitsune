@@ -7,7 +7,7 @@
     #include <string>
 #endif
 #ifdef HAS_SSTREAM
-#   include <sstream>
+    #include <sstream>
 #endif
 
 #include "Numbers.hpp"
@@ -71,12 +71,23 @@ namespace N1ghtTheF0x
             String(const std::stringstream &ss);
 #endif
             String(const String &string);
-            #define STRING_NUMBER(type) String(const type number);
-            STRING_NUMBER(u8)
-            STRING_NUMBER(u16)
-            STRING_NUMBER(u32)
-            STRING_NUMBER(u64)
-            #undef STRING_NUMBER
+            #define STRING_TYPE(type) String(const type number);
+            STRING_TYPE(u8)
+            STRING_TYPE(u16)
+            STRING_TYPE(u32)
+            STRING_TYPE(u64)
+            STRING_TYPE(s8)
+            STRING_TYPE(s16)
+            STRING_TYPE(s32)
+            STRING_TYPE(s64)
+#ifdef HAS_STRING // TODO: Impl this yourself
+            STRING_TYPE(float)
+            STRING_TYPE(double)
+            STRING_TYPE(ldouble)
+#endif
+            #undef STRING_TYPE
+            template<typename Type>
+            String(const Type* pointer): String(toBase((Size)pointer,16)) {}
             ~String();
 
             operator const char*() const;
@@ -94,6 +105,9 @@ namespace N1ghtTheF0x
             String &operator =(const String &string);
             String operator +(const String &string);
             String &operator +=(const String &string);
+
+            const char operator[](Size index) const;
+            char &operator[](Size index);
 
             /**
              * @brief Returns the length of the string (without `'\0'`)
@@ -115,6 +129,7 @@ namespace N1ghtTheF0x
              * @param string The string to add at the end
              */
             String &append(const String &string);
+            String &set(Size index,const char character);
             /**
              * @brief Checks if the string is empty. 
              * This does not include the `'\0'` character

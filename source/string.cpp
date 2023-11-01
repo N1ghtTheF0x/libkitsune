@@ -16,49 +16,24 @@ namespace N1ghtTheF0x
         }
         String String::toBase(u64 number,u64 base)
         {
-            // TODO: Impl from TypeScript
-            /*
-                const num_t: Record<number,string> = {
-                0: "0",
-                1: "1",
-                2: "2",
-                3: "3",
-                4: "4",
-                5: "5",
-                6: "6",
-                7: "7",
-                8: "8",
-                9: "9",
-                10: "A",
-                11: "B",
-                12: "C",
-                13: "D",
-                14: "E",
-                15: "F"
-                }
-
-                function toBase(num: number,base: number)
-                {
-                if(base < 2 || !num_t[base-1])
-                    throw new Error(`Can't get Base ${base} from ${num}`)
-                var v = num
-                var r = []
-                while(v != 0)
-                {
-                    const result = (v/base)|0
-                    r.push(num_t[v % base])
-                    v = result;
-                }
-                return r.reverse().join("")
-                }
-
-                const num = 255
-                const base = 2
-
-                console.info(toBase(num,base),num.toString(base))
-             */
+            char num_t[] = {
+                '0','1','2','3','4','5','6','7','8','9',
+                'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+                'a','b','c','d','e','f','h','j','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'
+            };
+            #define SIZE Memory::size(num_t)
+            if(base < 2)
+                throw Error("Error","Base is lower than 2");
+            if(base >= Memory::size(num_t))
+                throw Error("Error",String("Base is higher/equals ").append(SIZE));
             String string;
-
+            u64 v = number;
+            while(v != 0)
+            {
+                u64 result = (v/base)|0;
+                string.prefix(num_t[v % base]);
+                v = result;
+            }
             return string;
         }
         String::String()
@@ -85,24 +60,32 @@ namespace N1ghtTheF0x
             Memory::copy(cstr,_pointer,_length);
             _pointer[_length] = '\0';
         }
+
+#ifdef HAS_STRING // TODO: Impl this yourself
+        #define STRING_TO_STRING(type) \
+        String::String(const type value): String(std::to_string(value)) {}
+        STRING_TO_STRING(float)
+        STRING_TO_STRING(double)
+        STRING_TO_STRING(ldouble)
+        #undef STRING_TO_STRING
         String::String(const std::string string): String(string.c_str())
         {
             
         }
+#endif
+#ifdef HAS_SSTREAM
         String::String(const std::stringstream &stream): String(stream.str())
         {
 
         }
+#endif
         #define STRING_UINT(type) \
-        String::String(const type value) \
+        String::String(const type value): String() \
         { \
-            _length = 0; \
-            _pointer = (char*)Memory::create(1); \
-            _pointer[_length] = '\0'; \
             type number = value; \
             while(number > 0) \
             { \
-                char letter = 0x30 + number % 10; \
+                char letter = '0' + number % 10; \
                 prefix(letter); \
                 number = number / 10; \
             } \
@@ -111,7 +94,21 @@ namespace N1ghtTheF0x
         STRING_UINT(u16)
         STRING_UINT(u32)
         STRING_UINT(u64)
-        #undef STRING_INT
+        #undef STRING_UINT
+        #define STRING_SINT(type) \
+        String::String(const type value): String() \
+        { \
+            type n = value; \
+            if(value < 0) \
+                n = -n; \
+            prefix((u64)n); \
+            if(value < 0) prefix('-'); \
+        }
+        STRING_SINT(s8)
+        STRING_SINT(s16)
+        STRING_SINT(s32)
+        STRING_SINT(s64)
+        #undef STRING_SINT
         String::String(const String &string)
         {
             _length = string._length;
@@ -177,6 +174,21 @@ namespace N1ghtTheF0x
         {
             return append(string);
         }
+        const char String::operator[](Size index) const
+        {
+            return _pointer[index];
+        }
+        char &String::operator[](Size index)
+        {
+            return _pointer[index];
+        }
+        String &String::set(Size index,const char character)
+        {
+            if(index < 0 || index >= _length)
+                throw OutOfBoundsError(index,_length);
+            _pointer[index] = character;
+            return *this;
+        }
         Size String::length() const
         {
             return _length;
@@ -191,7 +203,7 @@ namespace N1ghtTheF0x
         }
         char String::charAt(Size index) const
         {
-            if(index < 0 || index > _length)
+            if(index < 0 || index >= _length)
                 throw OutOfBoundsError(index,_length);
             return _pointer[index];
         }
