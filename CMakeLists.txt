@@ -6,12 +6,12 @@ project(LibKitsune)
 check_include_file_cxx(string HAS_STRING)
 check_include_file_cxx(sstream HAS_SSTREAM)
 
-set(LIBKITSUNE_EXAMPLE TRUE)
-option(LIBKITSUNE_EXAMPLE "Compile Example" TRUE)
+option(LIBKITSUNE_EXAMPLE "Compile Example")
 
 string(TOLOWER ${PROJECT_NAME} LIB_NAME)
 
 add_library(${LIB_NAME}
+    source/number.cpp
     source/string.cpp
     source/memory.cpp
     source/error.cpp

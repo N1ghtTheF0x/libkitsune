@@ -30,6 +30,7 @@ namespace N1ghtTheF0x
              */
             Size _length;
         public:
+            static String toBase(u64 number,u64 base);
             /**
              * @brief Create a new empty string
              * 

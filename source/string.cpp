@@ -14,6 +14,53 @@ namespace N1ghtTheF0x
 
             return length;
         }
+        String String::toBase(u64 number,u64 base)
+        {
+            // TODO: Impl from TypeScript
+            /*
+                const num_t: Record<number,string> = {
+                0: "0",
+                1: "1",
+                2: "2",
+                3: "3",
+                4: "4",
+                5: "5",
+                6: "6",
+                7: "7",
+                8: "8",
+                9: "9",
+                10: "A",
+                11: "B",
+                12: "C",
+                13: "D",
+                14: "E",
+                15: "F"
+                }
+
+                function toBase(num: number,base: number)
+                {
+                if(base < 2 || !num_t[base-1])
+                    throw new Error(`Can't get Base ${base} from ${num}`)
+                var v = num
+                var r = []
+                while(v != 0)
+                {
+                    const result = (v/base)|0
+                    r.push(num_t[v % base])
+                    v = result;
+                }
+                return r.reverse().join("")
+                }
+
+                const num = 255
+                const base = 2
+
+                console.info(toBase(num,base),num.toString(base))
+             */
+            String string;
+
+            return string;
+        }
         String::String()
         {
             _length = 0;

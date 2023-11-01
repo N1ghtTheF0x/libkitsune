@@ -26,7 +26,15 @@ namespace N1ghtTheF0x
 {
     namespace LibKitsune
     {
-        
+        /**
+         * @brief Some helper functions for float/double
+         * 
+         */
+        namespace IEEE754
+        {
+            bool sign(float value);
+            bool sign(double value);
+        }
     }
 }
 

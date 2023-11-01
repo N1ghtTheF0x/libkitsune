@@ -21,21 +21,21 @@ catch(...)\
     print("Unknown Error");\
 }
 
+typedef union {
+    float f;
+    struct {
+        u32 mantisa : 23;
+        u32 exponent : 8;
+        u32 sign : 1;
+    } parts;
+} float_cast;
+
 void doStuff()
 {
-    Array<int> array;
-
-    array.push(10);
-    array.push(20);
-    array.push(30);
-
-    print_array(array);
-
-    array.remove(1);
-
-    print(std::endl);
-    print_array(array);
-    print(array.at(1));
+    float a = 123.456f;
+    float_cast b;
+    b.f = a;
+    print(a);
 }
 
 int main(int argc,char** argv)
