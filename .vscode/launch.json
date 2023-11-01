@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "cppvsdbg",
+            "name": "Launch Example",
+            "request": "launch",
+            "program": "${workspaceRoot}/build/Debug/example.exe",
+            "cwd": "${workspaceRoot}/build/Debug/",
+            "preLaunchTask": "Build"
+        }
+    ]
+}

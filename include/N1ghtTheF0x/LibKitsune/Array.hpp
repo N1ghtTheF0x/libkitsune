@@ -2,6 +2,7 @@
 #define __N1GHTTHEF0X_LIBKITSUNE_ARRAY_HPP
 
 #include "Numbers.hpp"
+#include "Memory.hpp"
 
 namespace N1ghtTheF0x
 {
@@ -12,23 +13,29 @@ namespace N1ghtTheF0x
         {
         private:
             Type *_pointer;
-            u64 _length;
+            Size _length;
         public:
             Array();
-            Array(Type init[],u64 length);
+            Array(Type init[],Size length);
+            Array(const Array<Type> &array);
             ~Array();
 
-            u64 length() const;
-            Type &at(u64 index) const;
-            Array &add(Type item);
-            bool remove(u64 index);
-            bool remove(u64 index,u64 count);
+            operator Type*();
+
+            Size length() const;
+            Type &at(Size index) const;
+            Array &push(Type item);
+            bool remove(Size index);
+            bool remove(Size index,Size count);
             void clear();
         private:
-            void _resize(u64 size);
+            void _resize(Size size);
             void _realign();
+            Size _memory_length();
         };
     }
 }
+
+#include "_array.tpp"
 
 #endif
