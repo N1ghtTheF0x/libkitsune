@@ -1,4 +1,5 @@
 #include <N1ghtTheF0x/LibKitsune.hpp>
+#include <N1ghtTheF0x/LibKitsune/Threads.hpp>
 
 #include <iostream>
 
@@ -21,21 +22,19 @@ catch(...)\
     print("Unknown Error");\
 }
 
-typedef union {
-    float f;
-    struct {
-        u32 mantisa : 23;
-        u32 exponent : 8;
-        u32 sign : 1;
-    } parts;
-} float_cast;
+void thread_func(void *data)
+{
+    while(true)
+    {
+        print("Hello from Thread");
+    }
+}
 
 void doStuff()
 {
-    float a = 123.456f;
-    float_cast b;
-    b.f = a;
-    print(a);
+    Thread t(thread_func);
+    if(t.joinable())
+        t.join();
 }
 
 int main(int argc,char** argv)
