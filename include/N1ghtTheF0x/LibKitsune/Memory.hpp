@@ -19,6 +19,14 @@ namespace N1ghtTheF0x
          */
         namespace Memory
         {
+            template<typename Type>
+            /**
+             * @brief Returns the size of `pointer`
+             * 
+             * @param pointer The memory address
+             * @return The size of `pointer` in bytes
+             */
+            Size size(const Type *pointer) { return (Size)(*(&pointer + 1) - pointer); }
             /**
              * @brief Allocates memory with the length of `size`
              * 
@@ -26,6 +34,13 @@ namespace N1ghtTheF0x
              * @return The newly created memory address
              */
             void* create(Size size);
+            template<typename Type>
+            /**
+             * @brief Allocates memory with the generic `Type`
+             * 
+             * @return The newly created memory address
+             */
+            Type* create() { return new Type(); }
             /**
              * @brief Copies `pointer` into a newly created memory
              * 
@@ -66,6 +81,13 @@ namespace N1ghtTheF0x
              * @param size The size of `pointer`
              */
             void erase(void* pointer,Size size);
+            template<typename Type>
+            /**
+             * @brief Deletes `pointer` from generic `Type` (literally just `erase(pointer,sizeof(Type))`)
+             * 
+             * @param pointer The memory to delete
+             */
+            void erase(Type* pointer) { erase(pointer,sizeof(Type)); }
             /**
              * @brief Moves `pointer` into a new memory. Will delete the orginal!
              * 
@@ -110,6 +132,9 @@ namespace N1ghtTheF0x
              */
             void* extendFront(void* pointer,Size pointer_size,Size size);
             template<typename Type>
+            /**
+             * @brief Swap `a` with `b`
+             */
             void swap(Type &a,Type &b)
             {
                 Type temp = a;
@@ -133,6 +158,43 @@ namespace N1ghtTheF0x
              */
             void write(void* destintation,void* buffer,Size size);
         }
+        template<typename Type>
+        class Ref
+        {
+        private:
+            Type* _pointer;
+            Size _counter = 0;
+        public:
+            explicit Ref(Type *p = NULL): _pointer(p) {}
+            ~Ref()
+            {
+                if(_counter)
+                {
+                    _counter++;
+                    return;
+                }
+                Memory::erase(_pointer);
+            }
+            Type& operator*(){ return *_pointer; }
+            Type* operator->(){ return _pointer; }
+            Size count() const { return _counter; }
+        };
+        template<typename Type>
+        Ref<Type> makeRef(const Type value) { return Ref<Type>(new Type(value)); }
+
+        template<typename Type>
+        class Ptr
+        {
+        private:
+            Type* _pointer;
+        public:
+            explicit Ptr(Type *p = NULL): _pointer(p) {}
+            ~Ptr(){ Memory::erase(_pointer,sizeof(Type)); }
+            Type& operator*(){ return *_pointer; }
+            Type* operator->(){ return _pointer; }
+        };
+        template<typename Type>
+        Ptr<Type> makePtr(const Type value) { return Ptr<Type>(new Type(value)); }
     }
 }
 
