@@ -71,7 +71,7 @@ namespace N1ghtTheF0x
             String(const std::stringstream &ss);
 #endif
             String(const String &string);
-            #define STRING_TYPE(type) String(const type number);
+            #define STRING_TYPE(type) String(const type value);
             STRING_TYPE(u8)
             STRING_TYPE(u16)
             STRING_TYPE(u32)
@@ -80,11 +80,9 @@ namespace N1ghtTheF0x
             STRING_TYPE(s16)
             STRING_TYPE(s32)
             STRING_TYPE(s64)
-#ifdef HAS_STRING // TODO: Impl this yourself
             STRING_TYPE(float)
             STRING_TYPE(double)
             STRING_TYPE(ldouble)
-#endif
             #undef STRING_TYPE
             template<typename Type>
             String(const Type* pointer): String(toBase((Size)pointer,16)) {}
@@ -186,6 +184,7 @@ namespace N1ghtTheF0x
              * @return The copied string but backwards 
              */
             String reverse();
+            Size indexOf(String value,Size offset = 0) const;
         private:
             /**
              * @brief The length of this string with the null terminator

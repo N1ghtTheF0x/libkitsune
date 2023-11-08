@@ -61,13 +61,7 @@ namespace N1ghtTheF0x
             _pointer[_length] = '\0';
         }
 
-#ifdef HAS_STRING // TODO: Impl this yourself
-        #define STRING_TO_STRING(type) \
-        String::String(const type value): String(std::to_string(value)) {}
-        STRING_TO_STRING(float)
-        STRING_TO_STRING(double)
-        STRING_TO_STRING(ldouble)
-        #undef STRING_TO_STRING
+#ifdef HAS_STRING
         String::String(const std::string string): String(string.c_str())
         {
             
@@ -109,6 +103,21 @@ namespace N1ghtTheF0x
         STRING_SINT(s32)
         STRING_SINT(s64)
         #undef STRING_SINT
+        #define STRING_FRAC(type) \
+        String::String(const type value): String() \
+        { \
+            s64 int_value = value; \
+            prefix(int_value); \
+            type fraction = value - int_value; \
+            if(fraction != 0) \
+            { \
+                append("."); \
+                if(fraction < 0) fraction = -fraction;  /* TODO: somehow parse fraction into string*/ \
+            } \
+        }
+        STRING_FRAC(float)
+        STRING_FRAC(double)
+        STRING_FRAC(ldouble)
         String::String(const String &string)
         {
             _length = string._length;
@@ -206,6 +215,15 @@ namespace N1ghtTheF0x
             if(index < 0 || index >= _length)
                 throw OutOfBoundsError(index,_length);
             return _pointer[index];
+        }
+        Size String::indexOf(String value,Size offset) const
+        {
+            for(Size index = offset;index < _length;index++)
+            {
+                if(Memory::same(_pointer + index,value._pointer,value._length))
+                    return index;
+            }
+            return -1;
         }
         void String::_resize(Size size)
         {

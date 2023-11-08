@@ -5,7 +5,6 @@ project(LibKitsune)
 
 check_include_file_cxx(string HAS_STRING)
 check_include_file_cxx(sstream HAS_SSTREAM)
-check_include_file_cxx(thread HAS_THREAD)
 
 option(LIBKITSUNE_EXAMPLE "Compile Example")
 
@@ -16,14 +15,13 @@ add_library(${LIB_NAME}
     source/string.cpp
     source/memory.cpp
     source/error.cpp
-    source/threads.cpp
+    source/random.cpp
 )
 
 target_include_directories(${LIB_NAME} PUBLIC include)
 target_compile_definitions(${LIB_NAME} PRIVATE
     HAS_STRING=${HAS_STRING}
     HAS_SSTREAM=${HAS_SSTREAM}
-    HAS_THREAD=${HAS_THREAD}
 )
 
 set(LIBKITSUNE_EXAMPLE ON)

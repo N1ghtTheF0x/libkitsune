@@ -1,5 +1,4 @@
 #include <N1ghtTheF0x/LibKitsune.hpp>
-#include <N1ghtTheF0x/LibKitsune/Threads.hpp>
 
 #include <iostream>
 #include <cstdint>
@@ -26,19 +25,11 @@ catch(...)\
     return EXIT_FAILURE; \
 }
 
-void thread_func(void *data)
-{
-    while(true)
-    {
-        print("Hello from Thread");
-    }
-}
-
 void doStuff()
 {
-    Thread t(thread_func);
-    if(t.joinable())
-        t.join();
+    String a = "abcdef";
+    print(a);
+    print(a.indexOf(3));
 }
 
 int main(int argc,char** argv)

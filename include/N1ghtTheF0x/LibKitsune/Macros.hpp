@@ -15,5 +15,10 @@ KITSUNE_MODEL(type)
 #define KITSUNE_STRUCT(type) \
 struct type; \
 KITSUNE_MODEL(type)
-
+#define KITSUNE_SINGLETON(type) \
+private: \
+    static type _instance; \
+public: \
+    type(const type &) = delete; \
+    static type &instance() { return _instance; };
 #endif

@@ -53,6 +53,10 @@ namespace N1ghtTheF0x
             bool sign(float value);
             bool sign(double value);
         }
+        namespace Numbers
+        {
+            u64 char2number(char letter);
+        }
     }
 }
 
